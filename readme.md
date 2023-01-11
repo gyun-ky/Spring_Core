@@ -20,6 +20,12 @@
 * 부가 기능으로 인해 코드가 복잡해지는 문제점을 해결하기 위해 템플릿 메서드 패턴을 도입
 * 변하는 부분과 변하지 않는 부분을 분리하는 마인드 필요!
 
+#### GOF의 디자인 패턴 정의
+* 작업에서 알고리즘의 골격을 정의, 일부 단계를 하위 클래스로 연계
+* 부모 클래스에 알고리즘 골격인 템플릿을 정의 -> 변경되는 로직은 자식 클래스에 정의
+  * 특정 부분만 재정의 가능 = 오버라이딩
+  * 상속 + 오버라이딩
+
 #### 구조
 * AbstractTemplate
   * execute() - 변하지 않는 부분 ex.log 기록 부분
@@ -41,12 +47,6 @@
 * call 추상 메서드를 오버라이드하려서 서비스 로직을 넣는다.
 * execute 메서드에 LogTrace 인스턴트를 파라미터로 전달하여서 서비스 로직을 포함하고 있는 로그기록 부분 코드를 실행
 
-#### 정의
-* GOF의 디자인 패턴으로부터 파생
-* 작업에서 알고리즘의 골격을 정의, 일부 단계를 하위 클래스로 연계
-* 부모 클래스에 알고리즘 골격인 템플릿을 정의 -> 변경되는 로직은 자식 클래스에 정의
-  * 특정 부분만 재정의 가능 = 오버라이딩
-  * 상속 + 오버라이딩 
 
 #### 단점
 * 상속에서 오는 단점으로 가져감
@@ -55,4 +55,43 @@
 
 ---
 ### 전략 패턴
+* 상속이 아닌 위임으로 표현
+* context가 strategy에 위임
+* Spring 의존관계 주입에서 사용하고 있는 것이 전략패턴
+* Context는 Strategy 인턴페이스에만 의존하고 있다
+
+#### 방식
+* 선 조립 후 실행 방식 - 조립후에는 context만 execute하면 된다
+* Context의 execute의 인자로 strategy를 넘겨서 실행
+
+#### 구조
+* Context
+* Strategy
+
+
+#### 단점
+* 조립 후에는 전략을 변경하기가 번거롭다
+* Context를 싱글톤으로 사용할 경우 변경 중에 동시성 이슈가 있을 수 있다 -> 차라리 Context를 새로 생성해서 사용
+
+익명 내부 클래스로 strategy 생성하고 context로 의존성 주입하여 실행
+```java
+  Strategy logic1 = new Strategy() {
+    @Override
+    public void call() {
+        log.info("비즈니스 로직1");
+        }
+    };
+
+    ContextV1 context1 = new ContextV1(logic1);
+    log.info("strategy Logic1 = {}", logic1.getClass());
+    context1.execute();
+```
+
+lambda로 코드 변환
+* 인터페이스에서 메서드가 1개만 있으면 사용 가능
+```java
+  ContextV1 context1 = new ContextV1(() -> log.info("비즈니스 로직1"));
+```
+
+Context를 실행하는 시점에 파라미터로 넘겨서 Strategy 전달
 

@@ -70,7 +70,7 @@
 
 
 #### 단점
-* 조립 후에는 전략을 변경하기가 번거롭다
+* 조립 후에는 전략을 변경하기가 번거롭다 -> Context 파라미터에 Strategy를 넘기는 방식을 사용해서 유연성을 높일 수 있음
 * Context를 싱글톤으로 사용할 경우 변경 중에 동시성 이슈가 있을 수 있다 -> 차라리 Context를 새로 생성해서 사용
 
 익명 내부 클래스로 strategy 생성하고 context로 의존성 주입하여 실행
@@ -86,6 +86,7 @@
     log.info("strategy Logic1 = {}", logic1.getClass());
     context1.execute();
 ```
+* context1이 execute를 실행할 떄, callback 함수인 strategy가 실행된다.
 
 lambda로 코드 변환
 * 인터페이스에서 메서드가 1개만 있으면 사용 가능
@@ -93,5 +94,23 @@ lambda로 코드 변환
   ContextV1 context1 = new ContextV1(() -> log.info("비즈니스 로직1"));
 ```
 
-Context를 실행하는 시점에 파라미터로 넘겨서 Strategy 전달
+### 템플릿 콜백 패턴
+* `콜백(callback)` 
+  * 다른 코드의 인수로서 넘겨주는 실행가능한 코드
+  * 코드가 호출(call) 되는 데 넘겨준 곳의 뒤(back)에서 실행된다는 의미
+  * Java에서는 콜백함수를 만들기 위해서는 객체가 필요
+    * java 8 이전 : 하나의 메서드 가진 인터페이스 + 익명 내부 클래스
+    * java 8 이후 : 람다 사용 가
+* GOF에서 나온 패턴은 아님 -> 스프링에서 많이 사용해서 Template(Context)와 CallBack(Strategy) 부분이 강조된 패턴
+  * ex) JdbcTemplate, RestTemplate ....
+
+
+#### 구조
+1. 클라이언트는 Template을 실행하면서 CallBack C()를 전달
+2. Template는 execute()를 시작하면서 callback.call()
+3. C()가 실행됨
+4. Template는 execute()를 종료함
+
+
+
 

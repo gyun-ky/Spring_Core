@@ -109,7 +109,7 @@ lambda로 코드 변환
 1. 클라이언트는 Template을 실행하면서 CallBack C()를 전달
 2. Template는 execute()를 시작하면서 callback.call()
 3. C()가 실행됨
-4. Template는 execute()를 종료함
+4. Template는 execute()를 종료함.
 
 
 

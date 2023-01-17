@@ -1,4 +1,4 @@
-# Spring Core 
+# 스프링 핵심원리 - 1
 
 ### 로그 추적기 구현
 #### 싱글톤 객체로 관리
@@ -104,12 +104,16 @@ lambda로 코드 변환
 * GOF에서 나온 패턴은 아님 -> 스프링에서 많이 사용해서 Template(Context)와 CallBack(Strategy) 부분이 강조된 패턴
   * ex) JdbcTemplate, RestTemplate ....
 
-
 #### 구조
 1. 클라이언트는 Template을 실행하면서 CallBack C()를 전달
 2. Template는 execute()를 시작하면서 callback.call()
 3. C()가 실행됨
 4. Template는 execute()를 종료함.
+
+#### 단점
+* 로그추적기를 어플리케이션 전반에 달기 위해서는 결국 원본 코드 (Controller, Service, Repository)를 수정해야한다. 
+  * -> 프록시 패턴???
+
 
 
 
